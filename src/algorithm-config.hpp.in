@@ -1,0 +1,9 @@
+#ifndef ALGORITHM_CONFIG_H
+#define ALGORITHM_CONFIG_H
+
+#define ALGORITHM_REVISION "${ALGORITHM_VERSION_MAJOR}_${ALGORITHM_VERSION_MINOR}"
+
+// new standard
+#cmakedefine HAVE_NEW_STD 1
+
+#endif
