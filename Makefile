@@ -194,17 +194,17 @@ algorithm/fast:
 .PHONY : algorithm/fast
 
 #=============================================================================
-# Target rules for targets named examples
+# Target rules for targets named utils
 
 # Build rule for target.
-examples: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 examples
-.PHONY : examples
+utils: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 utils
+.PHONY : utils
 
 # fast build rule for target.
-examples/fast:
-	$(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
-.PHONY : examples/fast
+utils/fast:
+	$(MAKE) -f examples/CMakeFiles/utils.dir/build.make examples/CMakeFiles/utils.dir/build
+.PHONY : utils/fast
 
 #=============================================================================
 # Target rules for targets named math
@@ -218,6 +218,19 @@ math: cmake_check_build_system
 math/fast:
 	$(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/build
 .PHONY : math/fast
+
+#=============================================================================
+# Target rules for targets named examples
+
+# Build rule for target.
+examples: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 examples
+.PHONY : examples
+
+# fast build rule for target.
+examples/fast:
+	$(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
+.PHONY : examples/fast
 
 # Help Target
 help:
@@ -234,8 +247,9 @@ help:
 	@echo "... install"
 	@echo "... a.out"
 	@echo "... algorithm"
-	@echo "... examples"
+	@echo "... utils"
 	@echo "... math"
+	@echo "... examples"
 .PHONY : help
 
 

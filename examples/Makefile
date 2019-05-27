@@ -80,6 +80,16 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -113,16 +123,6 @@ test:
 test/fast: test
 
 .PHONY : test/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -168,19 +168,19 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-examples/CMakeFiles/examples.dir/rule:
-	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/rule
-.PHONY : examples/CMakeFiles/examples.dir/rule
+examples/CMakeFiles/utils.dir/rule:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/utils.dir/rule
+.PHONY : examples/CMakeFiles/utils.dir/rule
 
 # Convenience name for target.
-examples: examples/CMakeFiles/examples.dir/rule
+utils: examples/CMakeFiles/utils.dir/rule
 
-.PHONY : examples
+.PHONY : utils
 
 # fast build rule for target.
-examples/fast:
-	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
-.PHONY : examples/fast
+utils/fast:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/utils.dir/build.make examples/CMakeFiles/utils.dir/build
+.PHONY : utils/fast
 
 # Convenience name for target.
 examples/CMakeFiles/math.dir/rule:
@@ -196,6 +196,21 @@ math: examples/CMakeFiles/math.dir/rule
 math/fast:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/build
 .PHONY : math/fast
+
+# Convenience name for target.
+examples/CMakeFiles/examples.dir/rule:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/rule
+.PHONY : examples/CMakeFiles/examples.dir/rule
+
+# Convenience name for target.
+examples: examples/CMakeFiles/examples.dir/rule
+
+.PHONY : examples
+
+# fast build rule for target.
+examples/fast:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
+.PHONY : examples/fast
 
 test_math.o: test_math.cpp.o
 
@@ -224,6 +239,33 @@ test_math.cpp.s:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/test_math.cpp.s
 .PHONY : test_math.cpp.s
 
+test_utils.o: test_utils.cpp.o
+
+.PHONY : test_utils.o
+
+# target to build an object file
+test_utils.cpp.o:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/utils.dir/build.make examples/CMakeFiles/utils.dir/test_utils.cpp.o
+.PHONY : test_utils.cpp.o
+
+test_utils.i: test_utils.cpp.i
+
+.PHONY : test_utils.i
+
+# target to preprocess a source file
+test_utils.cpp.i:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/utils.dir/build.make examples/CMakeFiles/utils.dir/test_utils.cpp.i
+.PHONY : test_utils.cpp.i
+
+test_utils.s: test_utils.cpp.s
+
+.PHONY : test_utils.s
+
+# target to generate assembly for a file
+test_utils.cpp.s:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/utils.dir/build.make examples/CMakeFiles/utils.dir/test_utils.cpp.s
+.PHONY : test_utils.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -232,16 +274,20 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install"
+	@echo "... list_install_components"
+	@echo "... utils"
+	@echo "... math"
 	@echo "... examples"
 	@echo "... rebuild_cache"
-	@echo "... math"
 	@echo "... install/local"
 	@echo "... test"
-	@echo "... list_install_components"
 	@echo "... edit_cache"
 	@echo "... test_math.o"
 	@echo "... test_math.i"
 	@echo "... test_math.s"
+	@echo "... test_utils.o"
+	@echo "... test_utils.i"
+	@echo "... test_utils.s"
 .PHONY : help
 
 
