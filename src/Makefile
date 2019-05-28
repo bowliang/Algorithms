@@ -251,6 +251,60 @@ math.cpp.s:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/math.cpp.s
 .PHONY : math.cpp.s
 
+union_find.o: union_find.cpp.o
+
+.PHONY : union_find.o
+
+# target to build an object file
+union_find.cpp.o:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/union_find.cpp.o
+.PHONY : union_find.cpp.o
+
+union_find.i: union_find.cpp.i
+
+.PHONY : union_find.i
+
+# target to preprocess a source file
+union_find.cpp.i:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/union_find.cpp.i
+.PHONY : union_find.cpp.i
+
+union_find.s: union_find.cpp.s
+
+.PHONY : union_find.s
+
+# target to generate assembly for a file
+union_find.cpp.s:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/union_find.cpp.s
+.PHONY : union_find.cpp.s
+
+utils.o: utils.cpp.o
+
+.PHONY : utils.o
+
+# target to build an object file
+utils.cpp.o:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/utils.cpp.o
+.PHONY : utils.cpp.o
+
+utils.i: utils.cpp.i
+
+.PHONY : utils.i
+
+# target to preprocess a source file
+utils.cpp.i:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/utils.cpp.i
+.PHONY : utils.cpp.i
+
+utils.s: utils.cpp.s
+
+.PHONY : utils.s
+
+# target to generate assembly for a file
+utils.cpp.s:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f src/CMakeFiles/algorithm.dir/build.make src/CMakeFiles/algorithm.dir/utils.cpp.s
+.PHONY : utils.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -272,6 +326,12 @@ help:
 	@echo "... math.o"
 	@echo "... math.i"
 	@echo "... math.s"
+	@echo "... union_find.o"
+	@echo "... union_find.i"
+	@echo "... union_find.s"
+	@echo "... utils.o"
+	@echo "... utils.i"
+	@echo "... utils.s"
 .PHONY : help
 
 

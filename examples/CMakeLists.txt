@@ -7,6 +7,7 @@ link_directories (${ALGORITHM_BINARY_DIR}/src)
 set (ALGORITHM_EXAMPLES
 math
 utils
+union_find
 )
 
 # iterate over tests

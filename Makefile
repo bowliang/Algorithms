@@ -220,6 +220,19 @@ math/fast:
 .PHONY : math/fast
 
 #=============================================================================
+# Target rules for targets named union_find
+
+# Build rule for target.
+union_find: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 union_find
+.PHONY : union_find
+
+# fast build rule for target.
+union_find/fast:
+	$(MAKE) -f examples/CMakeFiles/union_find.dir/build.make examples/CMakeFiles/union_find.dir/build
+.PHONY : union_find/fast
+
+#=============================================================================
 # Target rules for targets named examples
 
 # Build rule for target.
@@ -249,6 +262,7 @@ help:
 	@echo "... algorithm"
 	@echo "... utils"
 	@echo "... math"
+	@echo "... union_find"
 	@echo "... examples"
 .PHONY : help
 

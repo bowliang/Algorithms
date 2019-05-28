@@ -198,6 +198,21 @@ math/fast:
 .PHONY : math/fast
 
 # Convenience name for target.
+examples/CMakeFiles/union_find.dir/rule:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/union_find.dir/rule
+.PHONY : examples/CMakeFiles/union_find.dir/rule
+
+# Convenience name for target.
+union_find: examples/CMakeFiles/union_find.dir/rule
+
+.PHONY : union_find
+
+# fast build rule for target.
+union_find/fast:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/union_find.dir/build.make examples/CMakeFiles/union_find.dir/build
+.PHONY : union_find/fast
+
+# Convenience name for target.
 examples/CMakeFiles/examples.dir/rule:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/rule
 .PHONY : examples/CMakeFiles/examples.dir/rule
@@ -239,6 +254,33 @@ test_math.cpp.s:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/test_math.cpp.s
 .PHONY : test_math.cpp.s
 
+test_union_find.o: test_union_find.cpp.o
+
+.PHONY : test_union_find.o
+
+# target to build an object file
+test_union_find.cpp.o:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/union_find.dir/build.make examples/CMakeFiles/union_find.dir/test_union_find.cpp.o
+.PHONY : test_union_find.cpp.o
+
+test_union_find.i: test_union_find.cpp.i
+
+.PHONY : test_union_find.i
+
+# target to preprocess a source file
+test_union_find.cpp.i:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/union_find.dir/build.make examples/CMakeFiles/union_find.dir/test_union_find.cpp.i
+.PHONY : test_union_find.cpp.i
+
+test_union_find.s: test_union_find.cpp.s
+
+.PHONY : test_union_find.s
+
+# target to generate assembly for a file
+test_union_find.cpp.s:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/union_find.dir/build.make examples/CMakeFiles/union_find.dir/test_union_find.cpp.s
+.PHONY : test_union_find.cpp.s
+
 test_utils.o: test_utils.cpp.o
 
 .PHONY : test_utils.o
@@ -275,16 +317,20 @@ help:
 	@echo "... install/strip"
 	@echo "... install"
 	@echo "... list_install_components"
+	@echo "... rebuild_cache"
 	@echo "... utils"
 	@echo "... math"
-	@echo "... examples"
-	@echo "... rebuild_cache"
 	@echo "... install/local"
 	@echo "... test"
+	@echo "... union_find"
+	@echo "... examples"
 	@echo "... edit_cache"
 	@echo "... test_math.o"
 	@echo "... test_math.i"
 	@echo "... test_math.s"
+	@echo "... test_union_find.o"
+	@echo "... test_union_find.i"
+	@echo "... test_union_find.s"
 	@echo "... test_utils.o"
 	@echo "... test_utils.i"
 	@echo "... test_utils.s"

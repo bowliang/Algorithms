@@ -9,6 +9,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <ctime>
 
 #include "utils.hpp"
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
     FileReader::ReadFileWithAllInts(filename_W, int_vectors_W);
 
     std::cout << "************************************************************" << std::endl;
-    std::cout << "Begin whilte list" << std::endl;
+    std::cout << "Test whilte list" << std::endl;
     
     std::sort(int_vectors_W.begin(), int_vectors_W.end());
     for (auto key : int_vectors_T)
@@ -56,6 +57,51 @@ int main(int argc, char *argv[]) {
             std::cout << "Key " << key << " not found! "<< std::endl;
     }
     
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test singly linked list" << std::endl;
+    
+    SingleLinkedList<double> linked_list;
+    linked_list.AddNode(0.2);
+    linked_list.AddNode(0.8);
+    linked_list.AddNode(1.6);
+    linked_list.AddNode(6.4);
+    linked_list.Display();
+    
+    linked_list.AddAtFront(3.2);
+    linked_list.AddAtPos(1.2, 3);
+    linked_list.Display();
+    
+    linked_list.RemoveAtFront();
+    linked_list.Display();
+    linked_list.RemoveAtPos(2);
+    linked_list.Display();
+    linked_list.RemoveAtBack();
+    linked_list.Display();
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Two sum and three sum" << std::endl;
+    std::vector<int> ints_vector;
+    std::string filename = "/home/bowen/workspace/Algorithms/examples/input/1Kints.txt";
+    FileReader::ReadFileWithAllInts(filename, ints_vector);
+    std::clock_t start = std::clock();
+    std::cout << "The number of pairs: " << BasicUtils::TwoSumBrute(ints_vector) << std::endl;
+    double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    start = std::clock();
+    std::cout << "The number of pairs: " << BasicUtils::TwoSumFast(ints_vector) << std::endl;
+    double duration1 = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    
+    std::cout << "TwoSumBrute use time: " << duration << "s." << std::endl;
+    std::cout << "TwoSumFast use time: " << duration1 << "s." << std::endl;
+    
+    start = std::clock();
+    std::cout << "ThreeSum: The number of pairs: " << BasicUtils::ThreeSumBrute(ints_vector) << std::endl;
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    start = std::clock();
+    std::cout << "The number of pairs: " << BasicUtils::ThreeSumFast(ints_vector) << std::endl;
+    duration1 = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    
+    std::cout << "ThreeSumBrute use time: " << duration << "s." << std::endl;
+    std::cout << "ThreeSumFast use time: " << duration1 << "s." << std::endl;
 
     return 0;
 }

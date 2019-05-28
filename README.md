@@ -20,6 +20,9 @@ CONFIGURATION
    - prefix=[path]     Installation path, default: /usr/local
    - verbose=[bool]    Verbose output, default: false
 
+ This is the most standard config info
+     $ make config cxx=g++ prefix=~/libs
+
 ___________
 COMPILATION
 
