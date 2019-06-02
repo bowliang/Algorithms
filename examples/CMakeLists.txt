@@ -8,6 +8,7 @@ set (ALGORITHM_EXAMPLES
 math
 utils
 union_find
+sort
 )
 
 # iterate over tests

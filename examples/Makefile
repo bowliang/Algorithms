@@ -101,6 +101,17 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -123,17 +134,6 @@ test:
 test/fast: test
 
 .PHONY : test/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -168,6 +168,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+examples/CMakeFiles/math.dir/rule:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/math.dir/rule
+.PHONY : examples/CMakeFiles/math.dir/rule
+
+# Convenience name for target.
+math: examples/CMakeFiles/math.dir/rule
+
+.PHONY : math
+
+# fast build rule for target.
+math/fast:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/build
+.PHONY : math/fast
+
+# Convenience name for target.
 examples/CMakeFiles/utils.dir/rule:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/utils.dir/rule
 .PHONY : examples/CMakeFiles/utils.dir/rule
@@ -183,19 +198,19 @@ utils/fast:
 .PHONY : utils/fast
 
 # Convenience name for target.
-examples/CMakeFiles/math.dir/rule:
-	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/math.dir/rule
-.PHONY : examples/CMakeFiles/math.dir/rule
+examples/CMakeFiles/sort.dir/rule:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/sort.dir/rule
+.PHONY : examples/CMakeFiles/sort.dir/rule
 
 # Convenience name for target.
-math: examples/CMakeFiles/math.dir/rule
+sort: examples/CMakeFiles/sort.dir/rule
 
-.PHONY : math
+.PHONY : sort
 
 # fast build rule for target.
-math/fast:
-	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/build
-.PHONY : math/fast
+sort/fast:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/sort.dir/build.make examples/CMakeFiles/sort.dir/build
+.PHONY : sort/fast
 
 # Convenience name for target.
 examples/CMakeFiles/union_find.dir/rule:
@@ -253,6 +268,33 @@ test_math.s: test_math.cpp.s
 test_math.cpp.s:
 	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/test_math.cpp.s
 .PHONY : test_math.cpp.s
+
+test_sort.o: test_sort.cpp.o
+
+.PHONY : test_sort.o
+
+# target to build an object file
+test_sort.cpp.o:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/sort.dir/build.make examples/CMakeFiles/sort.dir/test_sort.cpp.o
+.PHONY : test_sort.cpp.o
+
+test_sort.i: test_sort.cpp.i
+
+.PHONY : test_sort.i
+
+# target to preprocess a source file
+test_sort.cpp.i:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/sort.dir/build.make examples/CMakeFiles/sort.dir/test_sort.cpp.i
+.PHONY : test_sort.cpp.i
+
+test_sort.s: test_sort.cpp.s
+
+.PHONY : test_sort.s
+
+# target to generate assembly for a file
+test_sort.cpp.s:
+	cd /home/bowen/workspace/Algorithms && $(MAKE) -f examples/CMakeFiles/sort.dir/build.make examples/CMakeFiles/sort.dir/test_sort.cpp.s
+.PHONY : test_sort.cpp.s
 
 test_union_find.o: test_union_find.cpp.o
 
@@ -318,16 +360,20 @@ help:
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... utils"
+	@echo "... edit_cache"
 	@echo "... math"
+	@echo "... utils"
+	@echo "... sort"
 	@echo "... install/local"
 	@echo "... test"
 	@echo "... union_find"
 	@echo "... examples"
-	@echo "... edit_cache"
 	@echo "... test_math.o"
 	@echo "... test_math.i"
 	@echo "... test_math.s"
+	@echo "... test_sort.o"
+	@echo "... test_sort.i"
+	@echo "... test_sort.s"
 	@echo "... test_union_find.o"
 	@echo "... test_union_find.i"
 	@echo "... test_union_find.s"

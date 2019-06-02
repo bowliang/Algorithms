@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
     std::string filename = "/home/bowen/workspace/Algorithms/examples/input/mediumUF.txt";
     FileReader::ReadFileWithAllInts(filename, n, int_vectors_P, int_vectors_Q);
     
+    // first test weighted union find
     std::clock_t start = std::clock();
     UnionFind uf(n);
     for (int i = 0; i < int_vectors_P.size(); i++)
@@ -41,4 +42,21 @@ int main(int argc, char *argv[]) {
     double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     
     std::cout << "Weighted UF use time: " << duration << "s." << std::endl;
+    
+    // now test quick find union find
+    start = std::clock();
+    QuickFindUF quick_find_UF(n);
+    for (int i = 0; i < int_vectors_P.size(); i++)
+    {
+        int p = int_vectors_P[i];
+        int q = int_vectors_Q[i];
+        if (quick_find_UF.connected(p, q))
+            continue;
+            
+        quick_find_UF.connect(p, q);
+    }
+    cout<< "Component:" << quick_find_UF.count() <<endl;
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    
+    std::cout << "Quick find UF use time: " << duration << "s." << std::endl;
 }

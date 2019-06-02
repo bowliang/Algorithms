@@ -13,6 +13,7 @@
 #include "algorithm_fwd.hpp"
 
 #include <math.h>
+#include <assert.h>
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -44,6 +45,8 @@ public:
     
     static void ReadFileWithAllInts(std::string const &filename, std::vector<int> &ints_vector);
     static void ReadFileWithAllInts(std::string const &filename, int &n, std::vector<int> &ints_vector_p, std::vector<int> &ints_vector_q);
+    static void ReadFileWithAllStrs(std::string const &filename, std::vector<std::string> &str_vector);
+
 };
 
 template <typename T>
@@ -260,6 +263,179 @@ public:
     static int TwoSumFast(std::vector<int> &ints_vector);
     static int ThreeSumBrute(std::vector<int> &ints_vector);
     static int ThreeSumFast(std::vector<int> &ints_vector);
+};
+
+class SortUtils
+{
+public:
+    SortUtils(){}
+    ~SortUtils(){}
+    
+    template <typename T>
+    static bool isSorted(std::vector<T> &vector_vals, int lo, int hi)
+    {
+        for (int i = lo + 1; i <= hi; i++)
+        {
+            if (vector_vals[i] < vector_vals[i-1])
+                return false;
+        }
+        return true;
+    }
+    
+    template <typename T>
+    static bool isSorted(std::vector<T> &vector_vals)
+    {
+        return isSorted(vector_vals, 0, vector_vals.size() - 1);
+    }
+    
+    template <typename T>
+    static bool isHSorted(std::vector<T> &vector_vals, int h)
+    {
+        for (int i = h; i < vector_vals.size(); i++)
+        {
+            if (vector_vals[i] < vector_vals[i-h])
+                return false;
+        }
+        return true;
+    }
+    
+    template <typename T>
+    static void selectionSort(std::vector<T> &vector_vals)
+    {
+        int n = vector_vals.size();
+        for (int i = 0; i < n; i++)
+        {
+            int min = i;
+            for (int j = i + 1; j < n; j++)
+            {
+                if (vector_vals[j] < vector_vals[min])
+                    min = j;
+            }
+            std::swap(vector_vals[i], vector_vals[min]);
+            assert(isSorted<T>(vector_vals, 0, i));
+        }
+        assert(isSorted<T>(vector_vals));
+    }
+    
+    template <typename T>
+    static void shellSort(std::vector<T> &vector_vals)
+    {
+        int n = vector_vals.size();
+        
+        // 3x + 1 incremental sequence for h-sorting
+        int h = 1;
+        while (h < n / 3)
+            h = h * 3 + 1;
+            
+        while (h >= 1)
+        {
+            // h-sort the vector
+            for (int i = h; i < n; i++)
+            {
+                for (int j = i; j >= h && vector_vals[j] < vector_vals[j - h]; j -= h)
+                    std::swap(vector_vals[j], vector_vals[j - h]);
+            }
+            assert(isHSorted<T>(vector_vals, h));
+            h /= 3;
+        }
+        assert(isSorted<T>(vector_vals));        
+    }
+    
+    template <typename T>
+    static void mergeSort(std::vector<T> &vector_vals)
+    {
+        std::vector<T> vector_aux = vector_vals;
+        mergeSort<T>(vector_vals, vector_aux, 0, vector_vals.size()-1);
+        assert(isSorted<T>(vector_vals));        
+    }
+    
+    template <typename T>
+    static void quickSort(std::vector<T> &vector_vals)
+    {
+        std::random_shuffle(vector_vals.begin(), vector_vals.end());
+        quickSort<T>(vector_vals, 0, vector_vals.size()-1);
+        assert(isSorted<T>(vector_vals));        
+    }
+    
+private:
+    template <typename T>
+    static void mergeSort(std::vector<T> &vector_vals, std::vector<T> &vector_aux, int lo, int hi)
+    {
+        if (hi <= lo)
+            return;
+            
+        int mid = lo + (hi - lo) / 2;
+        mergeSort(vector_vals, vector_aux, lo, mid);
+        mergeSort(vector_vals, vector_aux, mid + 1, hi);
+        merge(vector_vals, vector_aux, lo, mid, hi);
+    }
+    
+    template <typename T>
+    static void merge(std::vector<T> &vector_vals, std::vector<T> &vector_aux, int lo, int mid, int hi)
+    {
+        assert(isSorted<T>(vector_vals, lo, mid));  
+        assert(isSorted<T>(vector_vals, mid + 1, hi));  
+        
+        for (int i = lo; i <= hi; i++)
+        {
+            vector_aux[i] = vector_vals[i];
+        }
+        
+        int i = lo, j = mid + 1;
+        for (int k = lo; k <= hi; k++)
+        {
+            if (i > mid)
+                vector_vals[k] = vector_aux[j++];
+            else if (j > hi)
+                vector_vals[k] = vector_aux[i++];
+            else if (vector_aux[i] < vector_aux[j])
+                vector_vals[k] = vector_aux[i++];
+            else
+                vector_vals[k] = vector_aux[j++];
+        }
+    }
+    
+    template <typename T>
+    static void quickSort(std::vector<T> &vector_vals, int lo, int hi)
+    {
+        if (hi <= lo)
+            return;
+            
+        int j = partition(vector_vals, lo, hi);
+        quickSort(vector_vals, lo, j-1);
+        quickSort(vector_vals, j+1, hi);
+        assert(isSorted<T>(vector_vals, lo, hi));
+    }
+    
+    template <typename T>
+    static int partition(std::vector<T> &vector_vals, int lo, int hi)
+    {
+        int i = lo;
+        int j = hi + 1;
+        T v = vector_vals[lo];
+        while(true)
+        {
+            while(vector_vals[++i] < v)
+            {
+                if (i == hi)
+                    break;
+            }
+            
+            while(v < vector_vals[--j])
+            {
+                if (j == lo)
+                    break;
+            }
+            
+            if (i >= j)
+                break;
+                
+            std::swap(vector_vals[i], vector_vals[j]);
+        }
+        
+        std::swap(vector_vals[lo], vector_vals[j]);
+        return j;
+    }
 };
 
 __END_ALGORITHM__

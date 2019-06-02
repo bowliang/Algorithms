@@ -194,6 +194,19 @@ algorithm/fast:
 .PHONY : algorithm/fast
 
 #=============================================================================
+# Target rules for targets named math
+
+# Build rule for target.
+math: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 math
+.PHONY : math
+
+# fast build rule for target.
+math/fast:
+	$(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/build
+.PHONY : math/fast
+
+#=============================================================================
 # Target rules for targets named utils
 
 # Build rule for target.
@@ -207,17 +220,17 @@ utils/fast:
 .PHONY : utils/fast
 
 #=============================================================================
-# Target rules for targets named math
+# Target rules for targets named sort
 
 # Build rule for target.
-math: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 math
-.PHONY : math
+sort: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sort
+.PHONY : sort
 
 # fast build rule for target.
-math/fast:
-	$(MAKE) -f examples/CMakeFiles/math.dir/build.make examples/CMakeFiles/math.dir/build
-.PHONY : math/fast
+sort/fast:
+	$(MAKE) -f examples/CMakeFiles/sort.dir/build.make examples/CMakeFiles/sort.dir/build
+.PHONY : sort/fast
 
 #=============================================================================
 # Target rules for targets named union_find
@@ -260,8 +273,9 @@ help:
 	@echo "... install"
 	@echo "... a.out"
 	@echo "... algorithm"
-	@echo "... utils"
 	@echo "... math"
+	@echo "... utils"
+	@echo "... sort"
 	@echo "... union_find"
 	@echo "... examples"
 .PHONY : help

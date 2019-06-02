@@ -62,6 +62,34 @@ FileReader::ReadFileWithAllInts(std::string const &filename, int &n, std::vector
     }
 }
 
+void 
+FileReader::ReadFileWithAllStrs(std::string const &filename, std::vector<std::string> &str_vector)
+{
+    std::ifstream myfile;
+    std::string line, token;
+    std::string delimiter = " ";
+    myfile.open(filename.c_str());
+    if (myfile)
+    {        
+        std::size_t pos = 0;
+        while (std::getline(myfile, line))
+        {
+            while ((pos = line.find(delimiter)) != std::string::npos)
+            {
+                token = line.substr(0, pos);
+                str_vector.push_back(token);
+                line.erase(0, pos + delimiter.length());
+            }
+            str_vector.push_back(line);
+        }
+        myfile.close();
+    }
+    else
+    {
+        std::cout << "File " << filename << " not found! \n";
+    }
+}
+
 int 
 BasicUtils::TwoSumBrute(std::vector<int> &ints_vector)
 {
@@ -130,5 +158,6 @@ BasicUtils::ThreeSumFast(std::vector<int> &ints_vector)
     }
     return count;
 }
+
 
 __END_ALGORITHM__

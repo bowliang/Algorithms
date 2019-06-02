@@ -31,7 +31,7 @@ int
 UnionFind::find(int p)
 {
     if(!validate(p))
-        return 1;
+        return -1;
     
     while (p != parent[p]) 
     {
@@ -51,6 +51,9 @@ UnionFind::count()
 bool 
 UnionFind::connected(int p, int q)
 {
+    if(!validate(p) || !validate(q))
+        return false;
+        
     return find(p) == find(q);
 }
 
@@ -79,5 +82,70 @@ UnionFind::validate(int p)
         return false;
     return true;
 }
+
+
+QuickFindUF::QuickFindUF(int n)
+{    
+    assert(n >= 0);
+    
+    m_count = n;
+    id.resize(n);
+    for (int i = 0; i < n; i++)
+        id[i] = i;      
+    
+}
+
+int 
+QuickFindUF::count()
+{
+    return m_count;
+}
+
+int 
+QuickFindUF::find(int p)
+{
+    if(!validate(p))
+        return -1;
+    
+    return id[p];
+}
+
+bool 
+QuickFindUF::connected(int p, int q)
+{
+    if(!validate(p) || !validate(q))
+        return false;
+        
+    return id[p] == id[q];
+}
+
+void 
+QuickFindUF::connect (int p, int q)
+{
+    if(!validate(p) || !validate(q))
+        return;
+        
+    int pID = id[p];
+    int qID = id[q];
+    
+    if (pID == qID)
+        return;
+        
+    for (int i = 0; i < id.size(); i++)
+    {
+        if (id[i] == pID)
+            id[i] = qID;            
+    }
+    m_count--;
+}
+
+bool 
+QuickFindUF::validate(int p)
+{
+    if (p < 0 || p > id.size())
+        return false;
+    return true;
+}
+
 
 __END_ALGORITHM__

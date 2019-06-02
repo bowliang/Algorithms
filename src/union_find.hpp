@@ -37,6 +37,24 @@ private:
     int m_count;    
 };
 
+class QuickFindUF
+{
+public:
+    QuickFindUF(int n);
+    ~QuickFindUF() {};
+    
+    int count();
+    int find(int p);
+    bool connected(int p, int q);
+    void connect (int p, int q);
+    
+private:    
+    bool validate(int p);
+    
+    std::vector<int> id;
+    int m_count;    
+};
+
 __END_ALGORITHM__
 
 
