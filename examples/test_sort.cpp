@@ -83,5 +83,13 @@ int main(int argc, char *argv[]) {
     duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     
     std::cout << "Quick sorting use time: " << duration << "s." << std::endl;
+    
+    // then use heap sort
+    random_vecs1 = random_vecs;
+    start = std::clock();
+    SortUtils::heapSort<double>(random_vecs1);
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    
+    std::cout << "Heap sorting use time: " << duration << "s." << std::endl;
 
 }

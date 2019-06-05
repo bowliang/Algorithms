@@ -253,6 +253,148 @@ private:
 };
 
 
+template <typename T>
+class PriorityQueue
+{
+public:
+    PriorityQueue(int capacity)
+    {
+        m_pq.reserve(capacity+1);
+        n = 0;
+    }
+    
+    PriorityQueue()
+    {
+        m_pq.reserve(1);
+        n = 0;
+    }
+    
+    PriorityQueue(std::vector<T> &pq)
+    {
+        n = pq.size();
+        m_pq.resize(n + 1);
+        for (int i = 0; i < n; i++)
+            m_pq[i + 1] = pq[i];
+        for (int i = n / 2; i >= 1; i--)
+            sink(i);
+    }
+    
+    ~PriorityQueue() {};
+    
+    bool isEmpty()
+    {
+        return n == 0;
+    }
+    
+    int size()
+    {
+        return n;
+    }
+    
+    T max()
+    {
+        assert(!isEmpty());
+        return m_pq[1];
+    }
+    
+    void insert(T value)
+    {
+        if (n == m_pq.size() - 1)
+            resize(2 * m_pq.size());
+        
+        m_pq[++n] = value;
+        swim(n);
+        assert(isMaxHeap());
+    }
+    
+    T delMax()
+    {
+        assert(!isEmpty());
+        
+        T max = m_pq[1];
+        std::swap(m_pq[1], m_pq[n--]);
+        sink(1);
+        if ((n > 0) && (n == (m_pq.size() - 1) / 4))
+            resize(m_pq.size() / 2);
+            
+        assert(isMaxHeap());
+        return max;
+    }
+    
+    void display()
+    {
+        for (int i = 1; i <= n; i++)
+        {
+            std::cout<< m_pq[i] << "\t";
+        }
+        std::cout<< "\n";        
+    }
+    
+    void swap(int i, int j)
+    {
+        assert(i <= n && i >= 1 && j <= n && j >= 1);
+        std::swap(m_pq[i], m_pq[j]);
+    }
+    
+private:
+    void resize(int capacity)
+    {
+        assert(capacity > n);
+        std::vector<T> tmp = m_pq;
+        m_pq.clear();
+        m_pq.resize(capacity + 1);
+        for (int i = 0; i < n; i++)
+            m_pq[i + 1] = tmp[i + 1]; 
+    }
+    
+    void sink(int k)
+    {
+        while (2 * k < n)
+        {
+            int j = 2 * k;
+            if (j < n && m_pq[j] < m_pq[j+1])
+                j++;
+            if(m_pq[k] >= m_pq[j])
+                break;
+            std::swap(m_pq[k], m_pq[j]);
+            k = j;
+        }
+    }
+    
+    void swim(int k)
+    {
+        while (k > 1 && m_pq[k / 2] < m_pq[k])
+        {
+            std::swap(m_pq[k], m_pq[k / 2]);
+            k = k / 2;
+        }
+    }
+    
+    bool isMaxHeap()
+    {
+        return isMaxHeap(1);
+    }
+    
+    bool isMaxHeap(int k)
+    {
+        if (k > n)
+            return true;
+        int left = k * 2;
+        int right = left + 1;
+        if(left < n && m_pq[k] < m_pq[left])
+            return false;
+        if(right < n && m_pq[k] < m_pq[right])
+            return false;
+        return isMaxHeap(left) && isMaxHeap(right);
+    }
+
+
+    std::vector<T> m_pq;
+    int n;
+    
+};
+
+
 class BasicUtils
 {
 public:
@@ -357,6 +499,20 @@ public:
         assert(isSorted<T>(vector_vals));        
     }
     
+    template <typename T>
+    static void heapSort(std::vector<T> &vector_vals)
+    {
+        int n = vector_vals.size();
+        for (int k = n / 2; k >= 1; k--)
+            sink(vector_vals, k, n);
+        while (n > 1)
+        {
+            exch(vector_vals, 1, n--);
+            sink(vector_vals, 1, n);
+        }
+        assert(isSorted<T>(vector_vals));        
+    }
+    
 private:
     template <typename T>
     static void mergeSort(std::vector<T> &vector_vals, std::vector<T> &vector_aux, int lo, int hi)
@@ -436,6 +592,36 @@ private:
         std::swap(vector_vals[lo], vector_vals[j]);
         return j;
     }
+    
+    template <typename T>
+    static void sink(std::vector<T> &vector_vals, int k, int n)
+    {
+        while(2*k <= n)
+        {
+            int j = 2*k;
+            if (j < n && less(vector_vals, j, j+1))
+                j++;
+            if (!less(vector_vals, k, j))
+                break;
+            exch(vector_vals, k, j);
+            k = j;
+        }
+    }
+    
+    template <typename T>
+    static void exch(std::vector<T> &vector_vals, int i, int j)
+    {
+        // indices are "off-by-one" for heap sort
+        std::swap(vector_vals[i - 1], vector_vals[j - 1]);
+    }
+    
+    template <typename T>
+    static bool less(std::vector<T> &vector_vals, int i, int j)
+    {
+        // indices are "off-by-one" for heap sort
+        return (vector_vals[i - 1] < vector_vals[j - 1]);
+    }
+    
 };
 
 __END_ALGORITHM__

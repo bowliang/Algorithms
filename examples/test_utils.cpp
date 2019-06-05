@@ -102,6 +102,32 @@ int main(int argc, char *argv[]) {
     
     std::cout << "ThreeSumBrute use time: " << duration << "s." << std::endl;
     std::cout << "ThreeSumFast use time: " << duration1 << "s." << std::endl;
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test priority queue" << std::endl;
+    
+    std::vector<std::string> vec_strs;
+    vec_strs.reserve(11);
+    vec_strs.push_back("A");
+    vec_strs.push_back("E");
+    vec_strs.push_back("C");
+    vec_strs.push_back("Z");
+    vec_strs.push_back("D");
+    vec_strs.push_back("M");
+    vec_strs.push_back("Q");
+    vec_strs.push_back("F");
+    vec_strs.push_back("N");
+    vec_strs.push_back("L");
+    vec_strs.push_back("J");
+    PriorityQueue<std::string> pq(vec_strs);
+    pq.display();
+    
+    pq.delMax();
+    pq.display();
+    
+    pq.insert("S");
+    pq.insert("O");
+    pq.display();
 
     return 0;
 }
