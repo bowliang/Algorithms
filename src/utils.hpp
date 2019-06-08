@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <set>
 
 __BEGIN_ALGORITHM__
 
@@ -622,6 +623,445 @@ private:
         return (vector_vals[i - 1] < vector_vals[j - 1]);
     }
     
+};
+
+template <typename K, typename V>
+class BinarySearchTree
+{
+public:
+    BinarySearchTree() {}
+    ~BinarySearchTree()
+    {
+        std::set<Node*> queue;
+        queue.insert(m_root);
+        while (!queue.empty())
+        {
+            auto it = queue.begin();
+            Node *x = *it;
+            queue.erase(it);
+            
+            if (x == NULL)
+                continue;
+                
+            queue.insert(x->left);
+            queue.insert(x->right);
+            
+            delete x;
+        }
+        
+        
+    }
+    
+    struct Node
+    {
+        K key;
+        V value;
+        Node *left, *right;
+        int size; // number of nodes in the subtree
+    public:
+        Node(K _key, V _value, int _size)
+        : key(_key), value(_value), size(_size), left(NULL), right(NULL) {}
+    }; 
+    
+    
+    bool isEmpty()
+    {
+        return size() == 0;
+    }
+    
+    int size()
+    {
+        return size(m_root);
+    }
+    
+    bool contains(K key)
+    {
+        return !get(key).empty();
+    }
+    
+    V get(K key)
+    {
+        return get(m_root, key);
+    }
+    
+    void put(K key, V value)
+    {
+        m_root = put(m_root, key, value);
+        assert(check());
+    }
+    
+    void deleteMin()
+    {
+        assert(!isEmpty());
+        m_root = deleteMin(m_root);
+        assert(check());
+    }
+    
+    void deleteMax()
+    {
+        assert(!isEmpty());
+        m_root = deleteMax(m_root);
+        assert(check());
+    }
+    
+    void deleteKey(K key)
+    {
+        m_root = deleteKey(m_root);
+        assert(check());
+    }
+    
+    K minKey()
+    {
+        assert(!isEmpty());
+        return minNode(m_root)->key;
+    }
+    
+    K maxKey()
+    {
+        assert(!isEmpty());
+        return maxNode(m_root)->key;
+    }
+    
+    K floor(K key)
+    {
+        assert(!isEmpty());
+        Node *x = floor(m_root, key);
+        if (x == NULL)
+            return NULL;
+        else
+            return x->key;
+    }
+    
+    K ceiling(K key)
+    {
+        assert(!isEmpty());
+        Node *x = ceiling(m_root, key);
+        if (x == NULL)
+            return NULL;
+        else
+            return x->key;
+    }
+    
+    K select(int k)
+    {
+        assert(k >= 0 && k < size());
+        Node *x = select(m_root, k);
+        return x->key;
+    }
+    
+    int rank(K key)
+    {
+        return rank(m_root, key);
+    }
+    
+    int size(K lo, K hi)
+    {
+        if (lo > hi)
+            return 0;
+        if (contains(hi))
+            return rank(hi) - rank(lo) + 1;
+        else
+            return rank(lo) - 1;
+    }
+    
+    int height()
+    {
+        return height(m_root);
+    }
+    
+    std::set<K> levelOrder()
+    {
+        std::set<K> keys;
+        std::set<Node*> queue;
+        queue.insert(m_root);
+        while (!queue.empty())
+        {
+            auto it = queue.begin();
+            Node *x = *it;
+            queue.erase(it);
+            
+            if (x == NULL)
+                continue;
+                
+            keys.insert(x->key);
+            queue.insert(x->left);
+            queue.insert(x->right);
+        }
+        return keys;
+    }
+    
+    std::set<K> keys()
+    {
+        std::set<K> all_keys;
+        if (isEmpty())
+            return all_keys;
+        return keys(minKey(), maxKey());
+    }
+    
+    std::set<K> keys(K lo, K hi)
+    {
+        assert(!lo.empty() && !hi.empty());
+        
+        std::set<K> all_keys;
+        keys(m_root, all_keys, lo, hi);
+        return all_keys;
+    }
+    
+private:
+    int size(Node *x)
+    {
+        if (x == NULL)
+            return 0;
+        else
+            return x->size;
+    }
+    
+    V get(Node *x, K key)
+    {
+        V emp;
+        if (x == NULL)
+            return emp;
+            
+        int cmp = key.compare(x->key);
+        if (cmp < 0)
+            return get(x->left, key);
+        else if (cmp > 0)
+            return get(x->right, key);
+        else
+            return x->value;
+    }
+    
+    Node *put(Node *x, K key, V value)
+    {
+        if (x == NULL)
+            return new Node(key, value, 1);
+            
+        int cmp = key.compare(x->key);
+        if (cmp < 0)
+            x->left = put(x->left, key, value);
+        else if (cmp > 0)
+            x->right = put(x->right, key, value);
+        else
+            x->value = value;
+            
+        x->size = 1 + size(x->left) + size(x->right);
+        return x;
+    }
+    
+    Node *deleteMin(Node *x)
+    {
+        if(x->left == NULL)
+        {
+            Node *x_right = x->right;
+            delete x;
+            return x_right;
+        }
+        
+        x->left = deleteMin(x->left);
+        x->size = size(x->left) + size(x->right) + 1;
+        return x;
+    }
+        
+    Node *deleteMax(Node *x)
+    {
+        if(x->right == NULL)
+        {
+            Node *x_left = x->left;
+            delete x;
+            return x_left;
+        }
+        
+        x->right = deleteMin(x->right);
+        x->size = size(x->left) + size(x->right) + 1;
+        return x;
+    }
+    
+    Node *deleteKey(Node *x, K key)
+    {
+        if (x == NULL)
+            return NULL;
+        
+        int cmp = key.compare(x->key);
+        if (cmp < 0)
+            x->left = deleteKey(x->left, key);
+        else if (cmp > 0)
+            x->right = deleteKey(x->right, key);
+        else
+        {
+            if (x->right == NULL)
+            {
+                Node *x_left = x->left;
+                delete x;
+                return x_left;
+            }
+            if(x->left == NULL)
+            {
+                Node *x_right = x->right;
+                delete x;
+                return x_right;
+            }
+            
+            Node *tmp = x;
+            x = minNode(tmp->right);
+            x->right = deleteMin(tmp->right);
+            x->left = tmp->left;
+        }
+        x->size = size(x->left) + size(x->right) + 1;
+        return x;
+    }
+    
+    Node *minNode(Node *x)
+    {
+        if(x->left == NULL)
+            return x;
+        return minNode(x->left);
+    }
+    
+    Node *maxNode(Node *x)
+    {
+        if(x->right == NULL)
+            return x;
+        return minNode(x->right);
+    }
+    
+    Node *floor(Node *x, K key)
+    {
+        if (x == NULL)
+            return NULL;
+        
+        int cmp = key.compare(x->key);
+        if (cmp == 0)
+            return x;
+        
+        if (cmp < 0)
+            return floor(x->left, key);
+            
+        Node *tmp = floor(x->right, key);
+        if (tmp != NULL)
+            return tmp;
+        else
+            return x;
+    }
+    
+    Node *ceiling(Node *x, K key)
+    {
+        if (x == NULL)
+            return NULL;
+        
+        int cmp = key.compare(x->key);
+        if (cmp == 0)
+            return x;
+            
+        if (cmp < 0)
+        {
+            Node *tmp = ceiling(x->left, key);
+            if (tmp != NULL)
+                return tmp;
+            else
+                return x;
+        }
+        
+        ceiling(x->right, key);
+    }
+    
+    Node *select(Node *x, int k)
+    {
+        if (x == NULL)
+            return NULL;
+        int t = size(x->left);
+        if (t > k)
+            return select(x->left, k);
+        else if (t < k)
+            return select(x->right, k - t - 1);
+        else
+            return x;
+    }
+    
+    int rank(Node *x, K key)
+    {
+        if (x == NULL)
+            return 0;
+        int cmp = key.compare(x->key);
+        if (cmp < 0)
+            return rank(x->left, key);
+        else if (cmp > 0)
+            return 1 + size(x->left) + rank(x->right, key);
+        else
+            return size(x->left);
+    }
+    
+    void keys(Node *x, std::set<K> &all_keys, K lo, K hi)
+    {
+        if (x == NULL)
+            return;
+        int cmplo = lo.compare(x->key);
+        int cmphi = hi.compare(x->key);
+        
+        if (cmplo < 0)
+            keys(x->left, all_keys, lo, hi);
+        if (cmplo <= 0 && cmphi >= 0)
+            all_keys.insert(x->key);
+        if (cmphi > 0)
+            keys(x->right, all_keys, lo, hi);
+    }
+    
+    bool check()
+    {
+        K min, max;
+        if(!isBST(m_root, min, max))
+        {
+            std::cout<<"Not in symmetric order! \n";
+            return false;
+        }
+        if(!isSizeConsistent(m_root))
+        {
+            std::cout<<"Subtree counts not consistent! \n";
+            return false;
+        }
+        if(!isRankConsistent())
+        {
+            std::cout<<"Ranks not consistent! \n";
+            return false;
+        }
+        return true;
+    }
+    
+    bool isBST(Node *x, K min, K max)
+    {
+        if (x == NULL)
+            return true;
+        
+        if (!min.empty() && x->key.compare(min) <= 0)
+            return false;
+            
+        if (!max.empty() && x->key.compare(max) >= 0)
+            return false;
+        
+        return isBST(x->left, min, x->key) && isBST(x->right, x->key, max);
+    }
+    
+    bool isSizeConsistent(Node *x)
+    {
+        if (x == NULL)
+            return true;
+            
+        if (x->size != size(x->left) + size(x->right) + 1)
+            return false;
+            
+        return isSizeConsistent(x->left) && isSizeConsistent(x->right);
+    }
+    
+    bool isRankConsistent()
+    {
+        for (int i = 0; i < size(); i++)
+        {
+            if (i != rank(select(i)))
+                return false;
+        }
+        return true;
+    }
+
+    Node *m_root;
 };
 
 __END_ALGORITHM__

@@ -94,13 +94,13 @@ int main(int argc, char *argv[]) {
     std::cout << "TwoSumFast use time: " << duration1 << "s." << std::endl;
     
     start = std::clock();
-    std::cout << "ThreeSum: The number of pairs: " << BasicUtils::ThreeSumBrute(ints_vector) << std::endl;
+    //std::cout << "ThreeSum: The number of pairs: " << BasicUtils::ThreeSumBrute(ints_vector) << std::endl;
     duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     start = std::clock();
     std::cout << "The number of pairs: " << BasicUtils::ThreeSumFast(ints_vector) << std::endl;
     duration1 = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     
-    std::cout << "ThreeSumBrute use time: " << duration << "s." << std::endl;
+    //std::cout << "ThreeSumBrute use time: " << duration << "s." << std::endl;
     std::cout << "ThreeSumFast use time: " << duration1 << "s." << std::endl;
     
     std::cout << "************************************************************" << std::endl;
@@ -128,6 +128,27 @@ int main(int argc, char *argv[]) {
     pq.insert("S");
     pq.insert("O");
     pq.display();
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test binary search tree" << std::endl;
+    
+    std::string all_strs = "SEARCHEXAMPLE";
+    BinarySearchTree<std::string, int> bst;
+    for (int i = 0; i < all_strs.size(); i++)
+    {
+        std::string str(all_strs.begin() + i, all_strs.begin() + i + 1);
+        bst.put(str, i);
+    }
+    for (auto s : bst.levelOrder())
+    {
+        std::cout<<s<<": "<<bst.get(s)<< "\t";
+    }
+    std::cout<<std::endl;
+    for (auto s : bst.keys())
+    {
+        std::cout<<s<<": "<<bst.get(s)<<"\t";
+    }
+    std::cout<<std::endl;
 
     return 0;
 }
