@@ -632,8 +632,8 @@ public:
     BinarySearchTree() {}
     ~BinarySearchTree()
     {
-        std::set<Node*> queue;
-        queue.insert(m_root);
+        std::vector<Node*> queue;
+        queue.push_back(m_root);
         while (!queue.empty())
         {
             auto it = queue.begin();
@@ -643,13 +643,11 @@ public:
             if (x == NULL)
                 continue;
                 
-            queue.insert(x->left);
-            queue.insert(x->right);
+            queue.push_back(x->left);
+            queue.push_back(x->right);
             
             delete x;
-        }
-        
-        
+        }     
     }
     
     struct Node
@@ -769,11 +767,11 @@ public:
         return height(m_root);
     }
     
-    std::set<K> levelOrder()
+    std::vector<K> levelOrder()
     {
-        std::set<K> keys;
-        std::set<Node*> queue;
-        queue.insert(m_root);
+        std::vector<K> keys;
+        std::vector<Node*> queue;
+        queue.push_back(m_root);
         while (!queue.empty())
         {
             auto it = queue.begin();
@@ -783,26 +781,26 @@ public:
             if (x == NULL)
                 continue;
                 
-            keys.insert(x->key);
-            queue.insert(x->left);
-            queue.insert(x->right);
+            keys.push_back(x->key);
+            queue.push_back(x->left);
+            queue.push_back(x->right);
         }
         return keys;
     }
     
-    std::set<K> keys()
+    std::vector<K> keys()
     {
-        std::set<K> all_keys;
+        std::vector<K> all_keys;
         if (isEmpty())
             return all_keys;
         return keys(minKey(), maxKey());
     }
     
-    std::set<K> keys(K lo, K hi)
+    std::vector<K> keys(K lo, K hi)
     {
         assert(!lo.empty() && !hi.empty());
         
-        std::set<K> all_keys;
+        std::vector<K> all_keys;
         keys(m_root, all_keys, lo, hi);
         return all_keys;
     }
@@ -990,7 +988,7 @@ private:
             return size(x->left);
     }
     
-    void keys(Node *x, std::set<K> &all_keys, K lo, K hi)
+    void keys(Node *x, std::vector<K> &all_keys, K lo, K hi)
     {
         if (x == NULL)
             return;
@@ -1000,7 +998,7 @@ private:
         if (cmplo < 0)
             keys(x->left, all_keys, lo, hi);
         if (cmplo <= 0 && cmphi >= 0)
-            all_keys.insert(x->key);
+            all_keys.push_back(x->key);
         if (cmphi > 0)
             keys(x->right, all_keys, lo, hi);
     }
@@ -1061,7 +1059,286 @@ private:
         return true;
     }
 
-    Node *m_root;
+    Node *m_root = NULL;
+};
+
+
+template <typename K, typename V>
+class RedBlackBST
+{
+public:
+    RedBlackBST() {}
+    ~RedBlackBST() 
+    {
+        std::vector<Node*> queue;
+        queue.push_back(m_root);
+        while (!queue.empty())
+        {
+            auto it = queue.begin();
+            Node *x = *it;
+            queue.erase(it);
+            
+            if (x == NULL)
+                continue;
+                
+            queue.push_back(x->left);
+            queue.push_back(x->right);
+            
+            delete x;
+        }
+    }
+    
+    struct Node
+    {
+        K key;
+        V value;
+        Node *left, *right;
+        bool color;
+    public:
+        Node(K _key, V _value, bool _color)
+        : key(_key), value(_value), color(_color), left(NULL), right(NULL) {}
+    }; 
+    
+    V get(K key)
+    {
+        return get(m_root, key);
+    }
+    
+    V get(Node *x, K key)
+    {
+        while (x != NULL)
+        {
+            int cmp = key.compare(x->key);
+            if (cmp < 0)
+                x = x->left;
+            else if (cmp > 0)
+                x = x->right;
+            else 
+                return x->value;
+        }
+        V v1;
+        return v1;
+    }
+    
+    bool contains(K key)
+    {
+        return !get(key).empty();
+    }
+    
+    void put(K key, V value)
+    {
+        m_root = insert(m_root, key, value);
+        m_root->color = BLACK;
+        assert(check());
+    }
+    
+    int size()
+    {
+        return n;
+    }
+    
+    bool isEmpty()
+    {
+        return n == 0;
+    }
+    
+    int height()
+    {
+        return height(m_root);
+    }
+    
+    K minKey()
+    {
+        return minKey(m_root);
+    }
+    
+    K maxKey()
+    {
+        return maxKey(m_root);
+    }
+    
+    std::vector<K> keys()
+    {
+        std::vector<K> all_keys;
+        keys(m_root, all_keys);
+        return all_keys;
+    }
+    
+    
+private:
+    Node *insert(Node *x, K key, V value)
+    {
+        if (x == NULL)
+        {
+            n++;
+            return new Node(key, value, RED);
+        }
+
+        int cmp = key.compare(x->key);
+        if (cmp < 0)
+            x->left = insert(x->left, key, value);
+        else if (cmp > 0)
+            x->right = insert(x->right, key, value);
+        else 
+            x->value = value;
+            
+        // fix up and right-leaning links
+        if (isRed(x->right) && !isRed(x->left))
+            x = rotateLeft(x);
+        if (isRed(x->left) && isRed(x->left->left))
+            x = rotateRight(x);
+        if (isRed(x->left) && isRed(x->right))
+            flipColors(x);
+            
+        return x;
+    }
+    
+    bool isRed(Node *x)
+    {
+        if (x == NULL)
+            return false;
+        return x->color == RED;
+    }
+    
+    Node *rotateRight(Node *h)
+    {
+        assert(h != NULL && isRed(h->left));
+        Node *x = h->left;
+        h->left = x->right;
+        x->right = h;
+        x->color = h->color;
+        h->color = RED;
+        return x;
+    }
+    
+    Node *rotateLeft(Node *h)
+    {
+        assert(h != NULL && isRed(h->right));
+        Node *x = h->right;
+        h->right = x->left;
+        x->left = h;
+        x->color = h->color;
+        h->color = RED;
+        return x;
+    }
+    
+    void flipColors(Node *x)
+    {
+        assert(x != NULL && !isRed(x) && isRed(x->left) && isRed(x->right));
+        x->color = RED;
+        x->left->color = BLACK;
+        x->right->color = BLACK;
+    }
+    
+    int height(Node *x)
+    {
+        if (x == NULL)
+            return -1;
+            
+        return 1 + std::max(height(x->left), height(x->right));
+    }
+    
+    K minKey(Node *x)
+    {
+        K key;
+        while (x != NULL)
+        {
+            key = x->key;
+            x = x->left;
+        }
+        return key;
+    }
+    
+    K maxKey(Node *x)
+    {
+        K key;
+        while (x != NULL)
+        {
+            key = x->key;
+            x = x->right;
+        }
+        return key;
+    }
+    
+    void keys(Node *x, std::vector<K> &all_keys)
+    {
+        if (x == NULL)
+            return;
+        keys(x->left, all_keys);
+        all_keys.push_back(x->key);
+        keys(x->right, all_keys);
+    }
+    
+    bool check()
+    {
+        K min, max;
+        if (!isBST(m_root, min, max))
+        {
+            std::cout<<"Not in symmetric order! "<<std::endl;
+            return false;
+        }
+        if (!is23(m_root))
+        {
+            std::cout<<"Not in 2-3 tree! "<<std::endl;
+            return false;
+        }
+        if (!isBalanced())
+        {
+            std::cout<<"Not balanced! "<<std::endl;
+            return false;
+        }
+        return true;
+    }
+    
+    bool isBST(Node *x, K min, K max)
+    {
+        if (x == NULL)
+            return true;
+        if (!min.empty() && (x->key).compare(min) <= 0)
+            return false;
+        if (!max.empty() && (x->key).compare(max) >= 0)
+            return false;
+        return isBST(x->left, min, x->key) && isBST(x->right, x->key, max);
+    }
+    
+    bool is23(Node *x)
+    {
+        if (x == NULL)
+            return true;
+        if (isRed(x->right))
+            return false;
+        if (x != m_root && isRed(x) && isRed(x->left))
+            return false;
+        return is23(x->right) && is23(x->right);
+    }
+    
+    bool isBalanced()
+    {
+        int black = 0;
+        Node *x = m_root;
+        while (x != NULL)
+        {
+            if (!isRed(x))
+                black++;
+            x = x->left;
+        }
+        return isBalanced(m_root, black);
+    }
+    
+    bool isBalanced(Node *x, int black)
+    {
+        if (x == NULL)
+            return black == 0;
+        if (!isRed(x))
+            black--;
+        return isBalanced(x->left, black) && isBalanced(x->right, black);
+    }
+    
+
+    Node *m_root = NULL;
+    int n;
+    bool RED = true;
+    bool BLACK = false;
 };
 
 __END_ALGORITHM__

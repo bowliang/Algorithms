@@ -150,5 +150,26 @@ int main(int argc, char *argv[]) {
     }
     std::cout<<std::endl;
 
+
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test red black BST" << std::endl;
+    
+    RedBlackBST<std::string, int> RBbst;
+    for (int i = 0; i < all_strs.size(); i++)
+    {
+        std::string str(all_strs.begin() + i, all_strs.begin() + i + 1);
+        RBbst.put(str, i);
+    }
+    
+    std::cout<<"size = "<<RBbst.size()<<"\n";
+    std::cout<<"min = "<<RBbst.minKey()<<"\n";
+    std::cout<<"max = "<<RBbst.maxKey()<<"\n";
+    std::cout<<"height = "<<RBbst.height()<<"\n";
+    
+    for (auto s : RBbst.keys())
+    {
+        std::cout<<s<<": "<<RBbst.get(s)<<"\t";
+    }
+    std::cout<<std::endl;
     return 0;
 }
