@@ -20,6 +20,7 @@
 #include <fstream>
 #include <string>
 #include <set>
+#include <unordered_map>
 
 __BEGIN_ALGORITHM__
 
@@ -1339,6 +1340,269 @@ private:
     int n;
     bool RED = true;
     bool BLACK = false;
+};
+
+template <typename K, typename V>
+class HastSTSeparateChain
+{
+public:
+    HastSTSeparateChain() 
+    {
+        size_n = 0;
+        size_m = 997;
+        st = new Node*[size_m](); // here () makes the node pointer is null as initialization
+    }
+    
+    HastSTSeparateChain(int m) 
+    {
+        size_n = 0;
+        size_m = m;
+        st = new Node*[size_m]();        
+    }
+    
+    ~HastSTSeparateChain() 
+    {        
+        for (int i = 0; i < size_m; i++)
+        {
+            Node *x = st[i];
+            while (x != NULL)
+            {
+                Node *tmp = x->next;
+                delete x;
+                x = tmp;
+            }
+        }
+        delete[] st;
+    }
+    
+    struct Node
+    {
+        K key;
+        V value;
+        Node *next;
+
+    public:
+        Node(K _key, V _value, Node *_next)
+        : key(_key), value(_value), next(_next) {}
+    }; 
+    
+    int size()
+    {
+        return size_n;
+    }
+    
+    bool isEmpty()
+    {
+        return size_n == 0;
+    }
+    
+    bool contains(K key)
+    {
+        return !get(key).empty();
+    }
+    
+    V get (K key)
+    {
+        int i = hash(key);
+        for (Node *x = st[i]; x != NULL; x = x->next)
+        {
+            if (key.compare(x->key) == 0)
+                return x->value;
+        }
+        V v1;
+        return v1;
+    }
+    
+    void put (K key, V val)
+    {
+        int i = hash(key);
+        Node *x = st[i];
+        for (; x != NULL; x = x->next)
+        {
+            if (key.compare(x->key) == 0)
+            {
+                x->value = val;
+                return;
+            }
+        }
+        size_n++;
+        st[i] = new Node(key, val, st[i]);
+    }
+    
+    std::vector<K> keys()
+    {
+        std::vector<K> queue;
+        for (int i = 0; i < size_m; i++)
+        {
+            for (Node *x = st[i]; x != NULL; x = x->next)
+            {
+                queue.push_back(x->key);
+            }
+        }
+        return queue;
+    }
+    
+private:
+    int hash(K key)
+    {
+        std::size_t hash_code = hasher(key);
+        return (hash_code & 0x7fffffff) % size_m;
+    }
+
+    int size_n, size_m;
+    Node **st;   
+    std::hash<K> hasher;
+    
+};
+
+
+template <typename K, typename V>
+class HastSTLinearProbing
+{
+public:
+    HastSTLinearProbing() 
+    {
+        size_n = 0;
+        size_m = 4;
+        m_keys = new K[size_m];
+        m_values = new V[size_m];   
+    }
+    
+    HastSTLinearProbing(int capacity) 
+    {
+        size_n = 0;
+        size_m = capacity;
+        m_keys = new K[size_m];
+        m_values = new V[size_m];     
+    }
+    
+    ~HastSTLinearProbing() 
+    {        
+        delete[] m_keys;
+        delete[] m_values;
+    }
+    
+    int size()
+    {
+        return size_n;
+    }
+    
+    bool isEmpty()
+    {
+        return size_n == 0;
+    }
+    
+    bool contains(K key)
+    {
+        return !get(key).empty();
+    }
+    
+    V get (K key)
+    {        
+        for (int i = hash(key); !m_keys[i].empty(); i = (i+1)%size_m)
+        {
+            if (m_keys[i].compare(key) == 0)
+            {
+                return m_values[i];
+            }
+        }
+        V v1;
+        return v1;
+    }
+    
+    void put (K key, V val)
+    {
+        if (size_n >= size_m / 2)
+            resize(2*size_m);
+            
+        int i;
+        for (i = hash(key); !m_keys[i].empty(); i = (i+1)%size_m)
+        {
+            if (m_keys[i].compare(key) == 0)
+            {
+                m_values[i] = val;
+                return;
+            }
+        }
+        size_n++;
+        m_keys[i] = key;
+        m_values[i] = val;
+    }
+    
+    std::vector<K> keys()
+    {
+        std::vector<K> queue;
+        for (int i = 0; i < size_m; i++)
+        {
+            if (!m_keys[i].empty())
+            {
+                queue.push_back(m_keys[i]);
+            }
+        }
+        return queue;
+    }
+    
+    K key_at(int i)
+    {
+        if (i < size_m)
+            return m_keys[i];
+        else
+        {
+            K k1;
+            return k1;
+        }
+    }
+    
+    V value_at(int i)
+    {
+        if (i < size_m)
+            return m_values[i];
+        else
+        {
+            V v1;
+            return v1;
+        }
+    }
+    
+private:
+    int hash(K key)
+    {
+        std::size_t hash_code = hasher(key);
+        return (hash_code & 0x7fffffff) % size_m;
+    }
+    
+    void resize(int capacity)
+    {
+        HastSTLinearProbing<K, V> tmp(capacity);
+        for (int i = 0; i < size_m; i++)
+        {
+            if (!m_keys[i].empty())
+            {
+                tmp.put(m_keys[i], m_values[i]);
+            }
+        }
+        delete[] m_keys;
+        delete[] m_values;
+        
+        m_keys = new K[capacity];
+        m_values = new V[capacity];    
+        for (int i = 0; i < capacity; i++)
+        {
+            if (!tmp.key_at(i).empty())
+            {
+                m_keys[i] = tmp.key_at(i);
+                m_values[i] = tmp.value_at(i);
+            }
+        }
+        
+        size_m = capacity;
+    }
+
+    int size_n, size_m;
+    K* m_keys;
+    V* m_values;
+    std::hash<K> hasher;
+    
 };
 
 __END_ALGORITHM__

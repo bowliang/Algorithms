@@ -4,6 +4,18 @@ OVERVIEW
  This is C++ implementations of algorithms in the textbook Algorithm, 4th Edition. 
  The original implementation is done in Java, and here I redo them in C++ for later use.
 
+________
+CONTENTS
+
+ - Binary search. 
+ - Singly linked list.
+ - Priority queue.
+ - Two sum and three sum.
+ - Quick find and quick union.
+ - Sorting algorithms: selection sort, shell sort, merge sort, quick sort, heap sort.
+ - Search algorithms for symbol table: binary search tree, 2-3 search tree, red-black BSTs, and hash table. 
+ - Hash table include linear probing and separate chaining. 
+
 _____________
 CONFIGURATION
 

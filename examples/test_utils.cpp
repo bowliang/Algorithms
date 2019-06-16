@@ -171,5 +171,42 @@ int main(int argc, char *argv[]) {
         std::cout<<s<<": "<<RBbst.get(s)<<"\t";
     }
     std::cout<<std::endl;
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test separate chaining Hash table" << std::endl;
+    
+    HastSTSeparateChain<std::string, int> seperate_chain_HT;
+    for (int i = 0; i < all_strs.size(); i++)
+    {
+        std::string str(all_strs.begin() + i, all_strs.begin() + i + 1);
+        seperate_chain_HT.put(str, i);
+    }
+    
+    std::cout<<"size = "<<seperate_chain_HT.size()<<"\n";
+    
+    for (auto s : seperate_chain_HT.keys())
+    {
+        std::cout<<s<<": "<<seperate_chain_HT.get(s)<<"\t";
+    }
+    std::cout<<std::endl;
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test linear probing Hash table" << std::endl;
+    
+    HastSTLinearProbing<std::string, int> linear_probe_HT;
+    for (int i = 0; i < all_strs.size(); i++)
+    {
+        std::string str(all_strs.begin() + i, all_strs.begin() + i + 1);
+        linear_probe_HT.put(str, i);
+    }
+    
+    std::cout<<"size = "<<linear_probe_HT.size()<<"\n";
+    
+    for (auto s : linear_probe_HT.keys())
+    {
+        std::cout<<s<<": "<<linear_probe_HT.get(s)<<"\t";
+    }
+    std::cout<<std::endl;
+    
     return 0;
 }
