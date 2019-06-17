@@ -90,6 +90,44 @@ FileReader::ReadFileWithAllStrs(std::string const &filename, std::vector<std::st
     }
 }
 
+Graph 
+FileReader::ReadFileToBuildGraph(std::string const &filename)
+{
+    std::ifstream myfile;
+    std::string line, token;
+    std::string delimiter = " ";
+    myfile.open(filename.c_str());
+    if (myfile)
+    {        
+        std::getline(myfile, line);
+        int num_V = std::stoi(line);
+        std::getline(myfile, line);
+        int num_E = std::stoi(line);
+        
+        Graph graph(num_V);
+        
+        std::size_t pos = 0;
+        int v, w;
+        while (std::getline(myfile, line))
+        {
+            while ((pos = line.find(delimiter)) != std::string::npos)
+            {
+                token = line.substr(0, pos);
+                v = std::stoi(token);
+                line.erase(0, pos + delimiter.length());
+            }
+            w = std::stoi(line);
+            graph.addEdge(v, w);
+        }
+        myfile.close();
+        return graph;
+    }
+    else
+    {
+        std::cout << "File " << filename << " not found! \n";
+    }
+}
+
 int 
 BasicUtils::TwoSumBrute(std::vector<int> &ints_vector)
 {
@@ -157,6 +195,54 @@ BasicUtils::ThreeSumFast(std::vector<int> &ints_vector)
         
     }
     return count;
+}
+
+Graph::Graph(int v)
+{
+    assert(v >= 0);
+    num_V = v;
+    num_E = 0;
+    adj_vec.resize(num_V);
+}
+
+Graph::~Graph()
+{
+    
+}
+
+void 
+Graph::addEdge(int v, int w)
+{
+    num_E++;
+    adj_vec[v].push_back(w);
+    adj_vec[w].push_back(v);
+}
+    
+std::vector<int> 
+Graph::adj(int v)
+{
+    return adj_vec[v];
+}
+
+int 
+Graph::degree(int v)
+{
+    return adj_vec[v].size();
+}
+
+void 
+Graph::print()
+{
+    std::cout<<num_V<<" vertices, "<<num_E<<" edges \n";
+    for (int i = 0; i < num_V; i++)
+    {
+        std::cout<<i<<": ";
+        for (auto w : adj_vec[i])
+        {
+            std::cout<<w<<" ";
+        }
+        std::cout<<"\n";
+    }
 }
 
 

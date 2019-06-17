@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
     std::cout << "************************************************************" << std::endl;
     std::cout << "Test separate chaining Hash table" << std::endl;
     
-    HastSTSeparateChain<std::string, int> seperate_chain_HT;
+    HashSTSeparateChain<std::string, int> seperate_chain_HT;
     for (int i = 0; i < all_strs.size(); i++)
     {
         std::string str(all_strs.begin() + i, all_strs.begin() + i + 1);
@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
     std::cout << "************************************************************" << std::endl;
     std::cout << "Test linear probing Hash table" << std::endl;
     
-    HastSTLinearProbing<std::string, int> linear_probe_HT;
+    HashSTLinearProbing<std::string, int> linear_probe_HT;
     for (int i = 0; i < all_strs.size(); i++)
     {
         std::string str(all_strs.begin() + i, all_strs.begin() + i + 1);
@@ -207,6 +207,14 @@ int main(int argc, char *argv[]) {
         std::cout<<s<<": "<<linear_probe_HT.get(s)<<"\t";
     }
     std::cout<<std::endl;
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test undirected graphs " << std::endl;
+    
+    std::string filename_G = "/home/bowen/workspace/Algorithms/examples/input/tinyG.txt";
+    Graph graph = FileReader::ReadFileToBuildGraph(filename_G);
+    graph.print();
+    
     
     return 0;
 }

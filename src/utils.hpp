@@ -39,6 +39,8 @@ int BinarySearchRank(T k, std::vector<T> const &a)
     return -1;
 }
 
+class Graph;
+
 class FileReader
 {
 public:
@@ -48,6 +50,7 @@ public:
     static void ReadFileWithAllInts(std::string const &filename, std::vector<int> &ints_vector);
     static void ReadFileWithAllInts(std::string const &filename, int &n, std::vector<int> &ints_vector_p, std::vector<int> &ints_vector_q);
     static void ReadFileWithAllStrs(std::string const &filename, std::vector<std::string> &str_vector);
+    static Graph ReadFileToBuildGraph(std::string const &filename);
 
 };
 
@@ -1343,24 +1346,24 @@ private:
 };
 
 template <typename K, typename V>
-class HastSTSeparateChain
+class HashSTSeparateChain
 {
 public:
-    HastSTSeparateChain() 
+    HashSTSeparateChain() 
     {
         size_n = 0;
         size_m = 997;
         st = new Node*[size_m](); // here () makes the node pointer is null as initialization
     }
     
-    HastSTSeparateChain(int m) 
+    HashSTSeparateChain(int m) 
     {
         size_n = 0;
         size_m = m;
         st = new Node*[size_m]();        
     }
     
-    ~HastSTSeparateChain() 
+    ~HashSTSeparateChain() 
     {        
         for (int i = 0; i < size_m; i++)
         {
@@ -1457,10 +1460,10 @@ private:
 
 
 template <typename K, typename V>
-class HastSTLinearProbing
+class HashSTLinearProbing
 {
 public:
-    HastSTLinearProbing() 
+    HashSTLinearProbing() 
     {
         size_n = 0;
         size_m = 4;
@@ -1468,7 +1471,7 @@ public:
         m_values = new V[size_m];   
     }
     
-    HastSTLinearProbing(int capacity) 
+    HashSTLinearProbing(int capacity) 
     {
         size_n = 0;
         size_m = capacity;
@@ -1476,7 +1479,7 @@ public:
         m_values = new V[size_m];     
     }
     
-    ~HastSTLinearProbing() 
+    ~HashSTLinearProbing() 
     {        
         delete[] m_keys;
         delete[] m_values;
@@ -1573,7 +1576,7 @@ private:
     
     void resize(int capacity)
     {
-        HastSTLinearProbing<K, V> tmp(capacity);
+        HashSTLinearProbing<K, V> tmp(capacity);
         for (int i = 0; i < size_m; i++)
         {
             if (!m_keys[i].empty())
@@ -1604,6 +1607,33 @@ private:
     std::hash<K> hasher;
     
 };
+
+
+class Graph
+{
+public:
+    Graph(int v);
+    ~Graph();
+    
+    int V(){
+        return num_V;
+    }
+    
+    int E()
+    {
+        return num_E;
+    }
+    
+    void addEdge(int v, int w);
+    std::vector<int> adj(int v);
+    int degree(int v);
+    void print();
+    
+private:
+    int num_V, num_E;
+    std::vector<std::vector<int>> adj_vec;
+};
+
 
 __END_ALGORITHM__
 
