@@ -246,4 +246,63 @@ Graph::print()
 }
 
 
+DepthFirstSearch::DepthFirstSearch(Graph G, int s)
+{
+    source = s;
+    marker.resize(G.V());
+    edgeTo.resize(G.V());
+    assert(s>=0 && s <G.V());
+    dfs(G, s);
+}
+    
+bool 
+DepthFirstSearch::marked(int v)
+{
+    assert(v>=0 && v < marker.size());
+    return marker[v];
+}
+
+int 
+DepthFirstSearch::count()
+{
+    return counter;
+}
+
+bool 
+DepthFirstSearch::hasPathTo(int v)
+{
+    return marker[v];
+}
+
+std::vector<int> 
+DepthFirstSearch::pathTo(int v)
+{
+    std::vector<int> path;
+    if (!hasPathTo(v))
+        return path;
+        
+    for(int x = v; x != source; x = edgeTo[x])
+        path.push_back(x);
+    path.push_back(source);
+    
+    return path;
+}
+    
+    
+void
+DepthFirstSearch::dfs(Graph G, int v)
+{
+    counter++;
+    marker[v] = true;
+    for (auto w : G.adj(v))
+    {
+        if (!marker[w])
+        {
+            edgeTo[w] = v;
+            dfs(G, w);
+        }            
+    }
+}
+
+
 __END_ALGORITHM__

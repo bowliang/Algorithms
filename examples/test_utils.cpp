@@ -212,8 +212,54 @@ int main(int argc, char *argv[]) {
     std::cout << "Test undirected graphs " << std::endl;
     
     std::string filename_G = "/home/bowen/workspace/Algorithms/examples/input/tinyG.txt";
-    Graph graph = FileReader::ReadFileToBuildGraph(filename_G);
-    graph.print();
+    Graph G = FileReader::ReadFileToBuildGraph(filename_G);
+    G.print();
+    
+    std::cout << "************************************************************" << std::endl;
+    std::cout << "Test depth first search and path for undirected graph" << std::endl;
+    
+    DepthFirstSearch search0(G, 0);
+    DepthFirstSearch search1(G, 9);
+    for (int i = 0; i < G.V(); i++)
+    {
+        if (search0.marked(i))
+            std::cout<<i<<" ";
+    }
+    std::cout<<" \n";
+    
+    if (search0.count() != G.V())
+        std::cout<<"NOT connected \n";
+    else
+        std::cout<<"connected \n";
+    
+    for (int i = 0; i < G.V(); i++)
+    {
+        if (search1.marked(i))
+            std::cout<<i<<" ";
+    }
+    std::cout<<" \n";
+    
+    if (search1.count() != G.V())
+        std::cout<<"NOT connected \n";
+    else
+        std::cout<<"connected \n";
+        
+    for (int i = 0; i < G.V(); i++)
+    {
+        if (search0.hasPathTo(i))
+        {
+            std::cout<<"0 to "<<i<<": ";
+            for (auto w : search0.pathTo(i))
+            {
+                std::cout<<"-"<<w;                    
+            }
+            std::cout<<"\n";
+        }
+        else
+        {
+            std::cout<<"0 to "<<i<<": not connected \n";
+        }
+    }
     
     
     return 0;

@@ -1634,6 +1634,24 @@ private:
     std::vector<std::vector<int>> adj_vec;
 };
 
+class DepthFirstSearch
+{
+public:
+    DepthFirstSearch(Graph G, int s);
+    
+    bool marked(int v);
+    int count();
+    bool hasPathTo(int v);
+    std::vector<int> pathTo(int v);
+    
+private:
+    void dfs(Graph G, int v);
+
+    std::vector<bool> marker;
+    std::vector<int> edgeTo;
+    int counter, source;
+};
+
 
 __END_ALGORITHM__
 
